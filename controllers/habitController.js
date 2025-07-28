@@ -21,4 +21,14 @@ const createHabit = async (req, res) => {
     }
 };
 
-module.exports = {createHabit};
+const getHabits = async (req,res) => {
+    try {
+        const userId = req.user.id;
+        const habits = await Habits.find({createdBy : userId});
+        res.json(habits);
+    } catch(err){
+        res.status(500).json({message: "Server error while fetching habits"});
+    }
+};
+
+module.exports = {createHabit, getHabits};
