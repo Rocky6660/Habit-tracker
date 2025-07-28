@@ -5,7 +5,10 @@ const HabitSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    description: String,
+    description: {
+        type: String, 
+        default: "",
+    },
     frequency: {
         type: String,
         enum: ["daily", "weekly", "monthly"],
@@ -20,6 +23,10 @@ const HabitSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
+    isCompleted: {
+        type: Boolean,
+        default: false,
+    }
 }, {timestamps: true});
 
 module.exports = mongoose.model("Habits", HabitSchema);
