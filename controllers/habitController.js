@@ -31,4 +31,23 @@ const getHabits = async (req,res) => {
     }
 };
 
-module.exports = {createHabit, getHabits};
+const updateHabit = async (req,res) => {
+    try {
+        const habit = await Habits.findOne({_id: req.params.id, createdBy: req.user.id});
+
+        if(!habit){
+            return res.status(404).json({message: "Habit not found or unauthorized"});
+        }
+
+        const updatedHabit = await Habits.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new:true}
+        );
+        res.json(updatedHabit);
+    } catch(err){
+        res.status(500).json({message: "Error updating Habit", err})
+    }
+};
+
+module.exports = {createHabit, getHabits, updateHabit};
