@@ -50,4 +50,25 @@ const updateHabit = async (req,res) => {
     }
 };
 
-module.exports = {createHabit, getHabits, updateHabit};
+const deleteHabit = async (req,res) => {
+    try{
+        const userId = req.user.id;
+        const habitId = req.params.id;
+
+        const habit = await Habits.findByIdAndDelete({
+            _id: habitId,
+            createdBy: userId,
+        });
+
+        if(!habit){
+            return res.status(404).json({message: "Habit not found or unauthorized"});
+        }
+
+        res.json({message:"Habit deleted successfully"})
+    } catch(err){
+        console.error("Error deleting habit", err);
+        res.status(500).json({message: "Error Deleting Habit", err});
+    }
+}
+
+module.exports = {createHabit, getHabits, updateHabit, deleteHabit};
